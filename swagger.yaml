@@ -1,0 +1,51 @@
+openapi: 3.0.1
+info:
+  title: SQL Aggregation API
+  version: 1.0.0
+  description: データベースに対してSELECT SQLクエリを実行し、集計結果を返します。
+servers:
+  # ↓↓↓ 必ずあなたのngrokのURLに書き換えてください ↓↓↓
+  - url: https://5354aaf0bdf8.ngrok-free.app
+paths:
+  /aggregate:
+    post:
+      summary: SQL集計クエリの実行
+      description: SELECT SQLクエリを実行し、結果を返します。
+      operationId: executeSqlAggregation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sql:
+                  type: string
+                  description: "実行するSELECT文のSQLクエリ文字列。"
+                params:
+                  type: object
+                  description: "SQLクエリにバインドする名前付きパラメータのオブジェクト。例: {
+\":category\": \"Electronics\" }"
+      responses:
+        '200':
+          description: クエリが正常に実行されました。
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                  message:
+                    type: string
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - bearerAuth: []
